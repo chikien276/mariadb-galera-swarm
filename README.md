@@ -159,3 +159,4 @@ rolling update mechanism.
  - Add sourcing of /usr/local/lib/startup.sh for easier entrypoint extension.
  - Add 'sleep', 'no-galera' and 'bash' modes for easier maintenance/debugging.
  - Various other minor improvements.
+ - Added update.sh & Dockerfile.template to create version folders.
