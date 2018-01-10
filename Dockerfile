@@ -1,4 +1,17 @@
-FROM mariadb:10.1
+FROM golang AS stage
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+RUN mkdir -p /build
+WORKDIR /build
+ADD ./healthcheck .
+RUN go get github.com/onsi/ginkgo/ginkgo
+RUN go get github.com/sttts/galera-healthcheck/healthcheck
+RUN go get github.com/sttts/galera-healthcheck/logger
+RUN go get github.com/go-sql-driver/mysql
+RUN go build -o galera-healthcheck
+
+FROM mariadb:10.3
 
 RUN set -x \
     && apt-get update \
@@ -14,7 +27,7 @@ RUN set -x \
 
 COPY conf.d/*                /etc/mysql/conf.d/
 COPY *.sh                    /usr/local/bin/
-COPY bin/galera-healthcheck  /usr/local/bin/galera-healthcheck
+COPY --from=stage /build/galera-healthcheck  /usr/local/bin/galera-healthcheck
 COPY primary-component.sql   /
 
 # Fix permissions
