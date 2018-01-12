@@ -1,3 +1,3 @@
 [submodule "healthcheck"]
 	path = healthcheck
-	url = https://github.com/sttts/galera-healthcheck.git
+	url = git@github.com:chikien276/mariadb-galera-swarm.git
